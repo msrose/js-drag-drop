@@ -33,7 +33,7 @@ dragdrop.create("main", {
   backgroundColor: "blue",
   initialOffset: 50,
   numSquares: 1,
-  howNumbering: true,
+  showNumbering: true,
   squareColors: ["red", "green", "yellow"],
   squareSize: 150
 });

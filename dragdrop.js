@@ -35,7 +35,7 @@ window.dragdrop = (function() {
         position: "absolute",
         cursor: "move",
         textAlign: "center",
-        fontSize: "2em",
+        fontSize: options.squareSize / 2 + "px",
         fontFamily: "sans-serif",
         height: options.squareSize + "px",
         width: options.squareSize + "px"
@@ -67,13 +67,13 @@ window.dragdrop = (function() {
           dragItem = null;
         };
 
-        var divLabel = document.createElement("span");
-        divLabel.style.lineHeight = options.squareSize + "px";
         if(options.showNumbering) {
+          var divLabel = document.createElement("span");
+          divLabel.style.lineHeight = options.squareSize + "px";
           divLabel.innerText = i + 1;
+          newSquare.appendChild(divLabel);
         }
 
-        newSquare.appendChild(divLabel);
         container.appendChild(newSquare);
       }
 
