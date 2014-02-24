@@ -17,8 +17,8 @@
 
 ## Customization
 
-| Option | Description | Default |
----
+| Option          | Description                                                       | Default |
+| ---             | ---                                                               | ---     |
 | backgroundColor | Background color of `containerId` div.                            | `white` |
 | initialOffset   | Distance between leftmost square and the left side of the window. | `20`    |
 | numSquares      | The number of squares to draw in the `<div>`.                     | `1`     |
