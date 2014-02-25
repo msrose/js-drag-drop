@@ -7,8 +7,7 @@ window.dragdrop = (function() {
         numSquares: 1,
         squareSize: 100,
         backgroundColor: "white",
-        squareColors: ["white"],
-        initialOffset: 20,
+        squareColors: ["black"],
         showNumbering: false
       };
 
@@ -30,6 +29,8 @@ window.dragdrop = (function() {
       var initialClientY;
       var currentHighIndex = 1;
 
+      options.squareSize -= 2; //to account for 1px border
+
       var squareStyles = {
         border: "1px solid black",
         position: "absolute",
@@ -37,13 +38,22 @@ window.dragdrop = (function() {
         textAlign: "center",
         fontSize: options.squareSize / 2 + "px",
         fontFamily: "sans-serif",
-        height: options.squareSize + "px",
-        width: options.squareSize + "px"
+        height: options.squareSize - 2 + "px", //not sure why subtracting 2 here seems to work :P
+        width: options.squareSize - 2 + "px"
       };
+
+      var rowOffset = 0;
 
       for(var i = 0; i < options.numSquares; i++) {
         var newSquare = document.createElement("div");
-        squareStyles.left = options.initialOffset + i * options.squareSize + "px";
+        var leftPositioning = i * options.squareSize % (screen.width - options.squareSize);
+
+        if(leftPositioning < options.squareSize) {
+          rowOffset = leftPositioning;
+        }
+
+        squareStyles.left = leftPositioning - rowOffset + "px";
+        squareStyles.top = parseInt(i * options.squareSize / (screen.width - options.squareSize)) * options.squareSize + "px";
 
         if(options.squareColors.length > 0) {
           squareStyles.backgroundColor = options.squareColors[i % options.squareColors.length];
