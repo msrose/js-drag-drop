@@ -17,6 +17,25 @@ window.dragdrop = (function() {
         }
       }
 
+      if(options.randomColors) {
+        var hexChars = "0123456789ABCDEF".split("");
+
+        var randHex = function() {
+          var hexVal = "";
+          while(hexVal.length < 6) {
+            hexVal += hexChars[parseInt(Math.random() * hexChars.length)];
+          }
+          return "#" + hexVal;
+        }
+
+        var colors = [];
+        for(var i = 0; i < options.randomColors; i++) {
+          colors.push(randHex());
+        }
+
+        options.squareColors = colors;
+      }
+
       var container = document.getElementById(containerId);
       container.style.height = screen.height + "px";
       container.style.width = screen.width + "px";

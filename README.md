@@ -17,14 +17,15 @@
 
 ## Customization
 
-| Option          | Description                                                       | Default |
-| ---             | ---                                                               | ---     |
-| backgroundColor | Background color of `containerId` div.                            | `white` |
-| initialOffset   | Distance between leftmost square and the left side of the window. | `20`    |
-| numSquares      | The number of squares to draw in the `<div>`.                     | `1`     |
-| showNumbering   | Label each square with incrementing number as it is drawn.        | `false` |
-| squareColors    | An array of colors used to draw the squares. Square `n` is assigned the color `squareColors[n % squareColors.length]`. | `["white"]` |
-| squareSize      | The size of each square in pixels.                                | `100`   |
+| Option          | Description                                                                                                                                                  | Default     |
+| ---             | ---                                                                                                                                                          | ---         |
+| backgroundColor | Background color of `containerId` div.                                                                                                                       | `white`     |
+| initialOffset   | Distance between leftmost square and the left side of the window.                                                                                            | `20`        |
+| numSquares      | The number of squares to draw in the `<div>`.                                                                                                                | `1`         |
+| randomColors    | Number of random colors to generate to color the squares. Overrides `squareColors`.                                                                           | `undefined` |
+| showNumbering   | Label each square with incrementing number as it is drawn.                                                                                                   | `false`     |
+| squareColors    | An array of colors used to draw the squares. Square `n` is assigned the color `squareColors[n % squareColors.length]`. Ignored if `randomColors` is present. | `["white"]` |
+| squareSize      | The size of each square in pixels.                                                                                                                           | `100`       |
 
 ### Example
 
