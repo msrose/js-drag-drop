@@ -18,14 +18,9 @@ window.dragdrop = (function() {
       }
 
       if(options.randomColors) {
-        var hexChars = "0123456789ABCDEF".split("");
-
+        var hexMax = parseInt("FFFFFF", 16);
         var randHex = function() {
-          var hexVal = "";
-          while(hexVal.length < 6) {
-            hexVal += hexChars[parseInt(Math.random() * hexChars.length)];
-          }
-          return "#" + hexVal;
+            return "#" + parseInt(Math.random() * hexMax).toString(16)
         }
 
         var colors = [];
