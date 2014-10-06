@@ -2,18 +2,42 @@
 <html>
   <head>
     <title>Random JavaScript</title>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="dragdrop.css" />
+    <style type="text/css">
+      .box {
+        height: 200px;
+        width: 200px;
+        float: left;
+      }
+      #main {
+        width: 1200px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+      }
+    </style>
   </head>
   <body>
     <div id="main"></div>
     <script src="dragdrop.js" type="text/javascript"></script>
     <script type="text/javascript">
-      dragdrop.create("main", {
-        numSquares: 91,
-        backgroundColor: "blue",
-        randomColors: 7,
-        showNumbering: true
-      });
+      var main = document.getElementById("main");
+
+      for(var i = 0; i < 18; i++) {
+        var div = document.createElement("div");
+        div.id = "box" + i;
+        div.className = "box";
+        main.appendChild(div);
+      }
+
+      for(var i = 0; i < 18; i++) {
+        dragdrop.create({
+          numSquares: 64,
+          squareSize: 25,
+          randomColors: parseInt(Math.random() * 10) + 1,
+          border: { size: 1 }
+        }).draw("box" + i);
+      }
     </script>
   </body>
 </html>
