@@ -1,4 +1,6 @@
-body {
-  padding: 0;
-  margin: 0;
+.dragdrop.square {
+  position: absolute;
+  cursor: move;
+  text-align: center;
+  font-family: sans-serif;
 }

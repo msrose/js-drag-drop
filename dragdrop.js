@@ -1,4 +1,21 @@
 window.dragdrop = (function() {
+  function buildOptions(options, defaults) {
+    for(var property in defaults) {
+      if(!options[property]) {
+        options[property] = defaults[property];
+      }
+    }
+  }
+
+  function randHex(max) {
+    max = max || parseInt("FFFFFF", 16);
+    var hexVal = parseInt(Math.random() * max + 1).toString(16);
+    while(hexVal.length < 6) {
+      hexVal = "0" + hexVal;
+    }
+    return "#" + hexVal;
+  }
+
   return {
     create: function(containerId, options) {
       options = options || {};
@@ -6,37 +23,31 @@ window.dragdrop = (function() {
       var defaults = {
         numSquares: 1,
         squareSize: 100,
-        backgroundColor: "white",
-        squareColors: ["black"],
-        showNumbering: false
+        squareColors: ["gray"],
+        showNumbering: false,
+        randomColors: null,
+        border: { size: 0, format: "solid", color: "black" }
       };
 
-      for(var property in defaults) {
-        if(!options[property]) {
-          options[property] = defaults[property];
-        }
-      }
+      buildOptions(options, defaults);
+      buildOptions(options.border, defaults.border);
 
       if(options.randomColors) {
         var hexMax = parseInt("FFFFFF", 16);
-        var randHex = function() {
-            return "#" + parseInt(Math.random() * hexMax).toString(16)
-        }
 
         var colors = [];
         for(var i = 0; i < options.randomColors; i++) {
-          colors.push(randHex());
+          colors.push(randHex(hexMax));
         }
 
         options.squareColors = colors;
       }
 
       var container = document.getElementById(containerId);
-      container.style.height = screen.height + "px";
-      container.style.width = screen.width + "px";
-      container.style.backgroundColor = options.backgroundColor;
+      container.style.position = "relative";
+      container.style.overflow = "hidden";
 
-      var dragItem;
+      var dragItem = null;
       var initialLeft;
       var initialTop;
       var initialClientX;
@@ -44,14 +55,10 @@ window.dragdrop = (function() {
       var currentHighIndex = 1;
 
       var squareStyles = {
-        border: "1px solid black",
-        position: "absolute",
-        cursor: "move",
-        textAlign: "center",
+        border: options.border.size + "px " + options.border.format + " " + options.border.color,
         fontSize: options.squareSize / 2 + "px",
-        fontFamily: "sans-serif",
-        height: options.squareSize - 2 + "px",
-        width: options.squareSize - 2 + "px"
+        height: options.squareSize - options.border.size + "px",
+        width: options.squareSize - options.border.size + "px"
       };
 
       var squaresPerRow = parseInt(container.offsetWidth / options.squareSize);
@@ -60,6 +67,7 @@ window.dragdrop = (function() {
 
       for(var i = 0; i < options.numSquares; i++) {
         var newSquare = document.createElement("div");
+        newSquare.className = "dragdrop square";
 
         squareStyles.left = col * options.squareSize + "px";
         squareStyles.top = row * options.squareSize + "px";
@@ -81,6 +89,7 @@ window.dragdrop = (function() {
         newSquare.onmousedown = function(e) {
           dragItem = this;
           dragItem.style.zIndex = currentHighIndex;
+          currentHighIndex++;
           initialTop = dragItem.offsetTop;
           initialLeft = dragItem.offsetLeft;
           initialClientY = e.clientY;
@@ -88,7 +97,6 @@ window.dragdrop = (function() {
         };
 
         newSquare.onmouseup = function(e) {
-          currentHighIndex++;
           dragItem = null;
         };
 
@@ -102,11 +110,15 @@ window.dragdrop = (function() {
         container.appendChild(newSquare);
       }
 
-      window.onmousemove = function(e) {
+      container.onmousemove = function(e) {
         if(dragItem) {
           dragItem.style.top = initialTop + e.clientY - initialClientY + "px";
           dragItem.style.left = initialLeft + e.clientX - initialClientX + "px";
         }
+      };
+
+      container.onmouseup = function(e) {
+        dragItem = null;
       };
     }
   };
