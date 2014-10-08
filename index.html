@@ -5,8 +5,6 @@
     <link rel="stylesheet" type="text/css" href="dragdrop.css" />
     <style type="text/css">
       .box {
-        height: 200px;
-        width: 200px;
         float: left;
       }
       #main {
@@ -31,12 +29,16 @@
       }
 
       for(var i = 0; i < 18; i++) {
-        dragdrop.create({
+        var dd = dragdrop.create({
           numSquares: 64,
           squareSize: 25,
           randomColors: parseInt(Math.random() * 10) + 1,
-          border: { size: 1 }
-        }).draw("box" + i);
+          border: { size: 1, color: "none" },
+          snapToGrid: true,
+          autoFill: "*x*",
+          showNumbering: false
+        });
+        dd.draw("box" + i);
       }
     </script>
   </body>

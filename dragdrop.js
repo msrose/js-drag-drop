@@ -16,13 +16,20 @@ window.dragdrop = (function() {
     return "#" + hexVal;
   }
 
+  function isPerfectSquare(n) {
+    var sqrt = Math.sqrt(n);
+    return parseInt(sqrt) === sqrt;
+  }
+
   var defaults = {
     numSquares: 1,
     squareSize: 100,
     squareColors: ["gray"],
     showNumbering: false,
     randomColors: null,
-    border: { size: 0, format: "solid", color: "black" }
+    border: { size: 0, format: "solid", color: "black" },
+    snapToGrid: false,
+    autoFill: false
   };
 
   function Dragdrop(options) {
@@ -46,27 +53,53 @@ window.dragdrop = (function() {
   }
 
   Dragdrop.prototype.draw = function(containerId) {
+    var options = this;
     var dragItem = null;
     var initialLeft;
     var initialTop;
     var initialClientX;
     var initialClientY;
     var currentHighIndex = 1;
+    var lazyRows = false;
+    var lazyCols = false;
+    var dimensions;
 
     var squareStyles = {
       border: this.border.size + "px " + this.border.format + " " + this.border.color,
       fontSize: this.squareSize / 2 + "px",
-      height: this.squareSize - this.border.size + "px",
-      width: this.squareSize - this.border.size + "px"
+      height: this.squareSize - this.border.size * 2 + "px",
+      width: this.squareSize - this.border.size * 2 + "px"
     };
 
     var container = document.getElementById(containerId);
     container.style.position = "relative";
     container.style.overflow = "hidden";
+    if(this.autoFill) {
+      dimensions = this.autoFill.split("x");
+      if(dimensions[0] === "*") {
+        lazyRows = true;
+      } else {
+        container.style.height = parseInt(dimensions[0]) * this.squareSize + "px";
+      }
+      if(dimensions[1] === "*") {
+        lazyCols = true;
+      } else {
+        container.style.width = parseInt(dimensions[1]) * this.squareSize + "px";
+      }
+      if(lazyRows && lazyCols) {
+        var size = parseInt(Math.sqrt(this.numSquares) + (isPerfectSquare(this.numSquares) ? 0 : 1)) * this.squareSize + "px";
+        container.style.height = size;
+        container.style.width = size;
+        lazyRows = false;
+        lazyCols = false;
+      }
+    }
 
-    var squaresPerRow = parseInt(container.offsetWidth / this.squareSize);
+    var squaresPerRow = lazyCols ? this.numSquares / dimensions[0] : parseInt(container.offsetWidth / this.squareSize);
     var col = 0;
     var row = 0;
+    var colTotal = 0;
+    var rowTotal = 0;
 
     for(var i = 0; i < this.numSquares; i++) {
       var newSquare = document.createElement("div");
@@ -77,8 +110,10 @@ window.dragdrop = (function() {
 
       col++;
       if (col >= squaresPerRow) {
+        colTotal = col;
         col = 0;
         row++;
+        rowTotal = row + 1;
       }
 
       if(this.squareColors.length > 0) {
@@ -99,10 +134,6 @@ window.dragdrop = (function() {
         initialClientX = e.clientX;
       };
 
-      newSquare.onmouseup = function(e) {
-        dragItem = null;
-      };
-
       if(this.showNumbering) {
         var divLabel = document.createElement("span");
         divLabel.style.lineHeight = this.squareSize + "px";
@@ -113,6 +144,13 @@ window.dragdrop = (function() {
       container.appendChild(newSquare);
     }
 
+    if(lazyCols) {
+      container.style.width = colTotal * this.squareSize + "px";
+    } else if(lazyRows) {
+      container.style.height = rowTotal * this.squareSize + "px";
+    }
+
+    //bind event to container AND account for cursor position due to browser compatibility
     container.onmousemove = function(e) {
       if(dragItem) {
         if(this.offsetTop <= e.clientY && e.clientY <= this.offsetTop + this.offsetHeight) {
@@ -122,11 +160,43 @@ window.dragdrop = (function() {
           dragItem.style.left = initialLeft + e.clientX - initialClientX + "px";
         }
       }
+      e.preventDefault();
     };
 
-    container.onmouseup = function(e) {
-      dragItem = null;
+    var getSnapOffset = function(item, prop) {
+      var offsetMagnitude = item[prop] % options.squareSize;
+      return offsetMagnitude < options.squareSize / 2 ? -offsetMagnitude : options.squareSize - offsetMagnitude;
     };
+
+    window.onmouseup = (function(mouseup) {
+      return function(e) {
+        if(mouseup) {
+          mouseup(e);
+        }
+        if(dragItem && options.snapToGrid) {
+          var snapTop = dragItem.offsetTop + getSnapOffset(dragItem, "offsetTop");
+          var snapLeft = dragItem.offsetLeft + getSnapOffset(dragItem, "offsetLeft");
+          if(snapTop >= container.offsetHeight) {
+            snapTop = container.offsetHeight - options.squareSize;
+          } else if(snapTop < 0) {
+            snapTop = 0;
+          }
+          if(snapTop >= container.offsetHeight) {
+            snapTop = container.offsetHeight - options.squareSize;
+          } else if(snapTop < 0) {
+            snapTop = 0;
+          }
+          if(snapLeft >= container.offsetWidth) {
+            snapLeft = container.offsetWidth - options.squareSize;
+          } else if(snapLeft < 0) {
+            snapLeft = 0;
+          }
+          dragItem.style.top = snapTop + "px";
+          dragItem.style.left = snapLeft + "px";
+        }
+        dragItem = null;
+      };
+    })(window.onmouseup);
   };
 
   return {
