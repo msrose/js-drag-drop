@@ -29,7 +29,7 @@ window.dragdrop = (function() {
     randomColors: null,
     border: { size: 0, format: "solid", color: "black" },
     snapToGrid: false,
-    autoFill: false
+    autoFill: "*x*"
   };
 
   function Dragdrop(options) {
@@ -95,7 +95,10 @@ window.dragdrop = (function() {
       }
     }
 
-    var squaresPerRow = lazyCols ? this.numSquares / dimensions[0] : parseInt(container.offsetWidth / this.squareSize);
+    var containerHeight = parseInt(container.style.height);
+    var containerWidth = parseInt(container.style.width);
+
+    var squaresPerRow = lazyCols ? this.numSquares / dimensions[0] : parseInt(containerWidth / this.squareSize);
     var col = 0;
     var row = 0;
     var colTotal = 0;
@@ -145,9 +148,11 @@ window.dragdrop = (function() {
     }
 
     if(lazyCols) {
-      container.style.width = colTotal * this.squareSize + "px";
+      containerWidth = colTotal * this.squareSize;
+      container.style.width = containerWidth + "px";
     } else if(lazyRows) {
-      container.style.height = rowTotal * this.squareSize + "px";
+      containerHeight = rowTotal * this.squareSize;
+      container.style.height = containerHeight + "px";
     }
 
     //bind event to container AND account for cursor position due to browser compatibility
@@ -176,18 +181,13 @@ window.dragdrop = (function() {
         if(dragItem && options.snapToGrid) {
           var snapTop = dragItem.offsetTop + getSnapOffset(dragItem, "offsetTop");
           var snapLeft = dragItem.offsetLeft + getSnapOffset(dragItem, "offsetLeft");
-          if(snapTop >= container.offsetHeight) {
-            snapTop = container.offsetHeight - options.squareSize;
+          if(snapTop >= containerHeight) {
+            snapTop = containerHeight - options.squareSize;
           } else if(snapTop < 0) {
             snapTop = 0;
           }
-          if(snapTop >= container.offsetHeight) {
-            snapTop = container.offsetHeight - options.squareSize;
-          } else if(snapTop < 0) {
-            snapTop = 0;
-          }
-          if(snapLeft >= container.offsetWidth) {
-            snapLeft = container.offsetWidth - options.squareSize;
+          if(snapLeft >= containerWidth) {
+            snapLeft = containerWidth - options.squareSize;
           } else if(snapLeft < 0) {
             snapLeft = 0;
           }

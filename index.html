@@ -21,14 +21,16 @@
     <script type="text/javascript">
       var main = document.getElementById("main");
 
-      for(var i = 0; i < 18; i++) {
+      var containers = 24;
+
+      for(var i = 0; i < containers; i++) {
         var div = document.createElement("div");
         div.id = "box" + i;
         div.className = "box";
         main.appendChild(div);
       }
 
-      for(var i = 0; i < 18; i++) {
+      for(var i = 0; i < containers; i++) {
         var dd = dragdrop.create({
           numSquares: 64,
           squareSize: 25,
