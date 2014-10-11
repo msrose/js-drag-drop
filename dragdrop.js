@@ -57,8 +57,8 @@ window.dragdrop = (function() {
     var dragItem = null;
     var initialLeft;
     var initialTop;
-    var initialClientX;
-    var initialClientY;
+    var initialPageX;
+    var initialPageY;
     var currentHighIndex = 1;
     var lazyRows = false;
     var lazyCols = false;
@@ -133,8 +133,8 @@ window.dragdrop = (function() {
         currentHighIndex++;
         initialTop = dragItem.offsetTop;
         initialLeft = dragItem.offsetLeft;
-        initialClientY = e.clientY;
-        initialClientX = e.clientX;
+        initialPageY = e.pageY;
+        initialPageX = e.pageX;
       };
 
       if(this.showNumbering) {
@@ -158,11 +158,11 @@ window.dragdrop = (function() {
     //bind event to container AND account for cursor position due to browser compatibility
     container.onmousemove = function(e) {
       if(dragItem) {
-        if(this.offsetTop <= e.clientY && e.clientY <= this.offsetTop + this.offsetHeight) {
-          dragItem.style.top = initialTop + e.clientY - initialClientY + "px";
+        if(this.offsetTop <= e.pageY && e.pageY <= this.offsetTop + this.offsetHeight) {
+          dragItem.style.top = initialTop + e.pageY - initialPageY + "px";
         }
-        if(this.offsetLeft <= e.clientX && e.clientX <= this.offsetLeft + this.offsetWidth) {
-          dragItem.style.left = initialLeft + e.clientX - initialClientX + "px";
+        if(this.offsetLeft <= e.pageX && e.pageX <= this.offsetLeft + this.offsetWidth) {
+          dragItem.style.left = initialLeft + e.pageX - initialPageX + "px";
         }
       }
       e.preventDefault();
