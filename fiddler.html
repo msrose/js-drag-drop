@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dragdrop Fiddler</title>
+    <link rel="stylesheet" type="text/css" href="dragdrop.css" />
+    <style type="text/css">
+      body {
+        margin: 0;
+        padding: 0;
+      }
+      #main {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      #options {
+        padding: 10px;
+        width: 100%;
+        font-family: monospace;
+        border-bottom: 1px solid gray;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="options">
+      numSquares: <input type="text" id="numSquares" />
+      squareSize: <input type="text" id="squareSize" />
+      randomColors: <input type="text" id="randomColors" />
+      border.size: <input type="text" id="border.size" />
+      border.format: <input type="text" id="border.format" />
+      border.color: <input type="text" id="border.color" />
+      snapToGrid: <input type="checkbox" id="snapToGrid" />
+      autoFill: <input type="text" id="autoFill" />
+      showNumbering: <input type="checkbox" id="showNumbering" />
+      squareColors: <input type="text" id="squareColors" />
+      <button id="btnDraw">Go!</button>
+    </div>
+    <div id="main"></div>
+    <script src="dragdrop.js" type="text/javascript"></script>
+    <script type="text/javascript">
+      document.getElementById("btnDraw").onclick = function(e) {
+        var options = {
+          numSquares: parseInt(document.getElementById("numSquares").value) || dragdrop.defaults.numSquares,
+          squareSize: parseInt(document.getElementById("squareSize").value) || dragdrop.defaults.squareSize,
+          randomColors: parseInt(document.getElementById("randomColors").value) || dragdrop.defaults.randomColors,
+          border: {
+            size: parseInt(document.getElementById("border.size").value) || dragdrop.defaults.border.size,
+            format: document.getElementById("border.format").value || dragdrop.defaults.border.format,
+            color: document.getElementById("border.color").value || dragdrop.defaults.border.color,
+          },
+          snapToGrid: document.getElementById("snapToGrid").checked,
+          autoFill: document.getElementById("autoFill").value || dragdrop.defaults.autoFill,
+          showNumbering: document.getElementById("showNumbering").checked,
+          squareColors: (document.getElementById("squareColors").value || dragdrop.defaults.squareColors.join(",")).split(",")
+        };
+        var main = document.getElementById("main");
+        while(main.firstChild) {
+          main.removeChild(main.firstChild);
+        }
+        dragdrop.create(options).draw("main");
+      };
+    </script>
+  </body>
+</html>
