@@ -11,6 +11,8 @@
       #main {
         margin-left: auto;
         margin-right: auto;
+        border: 1px solid lightgray;
+        display: none;
       }
       #options {
         padding: 10px;
@@ -18,22 +20,36 @@
         font-family: monospace;
         border-bottom: 1px solid gray;
         margin-bottom: 10px;
+        overflow: hidden;
+      }
+      .option-input {
+        width: 200px;
+        height: 50px;
+        float: left;
+        border: 1px dotted lightgray;
+        padding: 5px;
+      }
+      #btnDraw {
+        margin-left: auto;
+        margin-right: auto;
+        width: 81px;
+        height: 50px;
       }
     </style>
   </head>
   <body>
     <div id="options">
-      numSquares: <input type="text" id="numSquares" />
-      squareSize: <input type="text" id="squareSize" />
-      randomColors: <input type="text" id="randomColors" />
-      border.size: <input type="text" id="border.size" />
-      border.format: <input type="text" id="border.format" />
-      border.color: <input type="text" id="border.color" />
-      snapToGrid: <input type="checkbox" id="snapToGrid" />
-      autoFill: <input type="text" id="autoFill" />
-      showNumbering: <input type="checkbox" id="showNumbering" />
-      squareColors: <input type="text" id="squareColors" />
-      <button id="btnDraw">Go!</button>
+      <div class="option-input">numSquares: <input type="text" id="numSquares" /></div>
+      <div class="option-input">squareSize: <input type="text" id="squareSize" /></div>
+      <div class="option-input">randomColors: <input type="text" id="randomColors" /></div>
+      <div class="option-input">border.size: <input type="text" id="border.size" /></div>
+      <div class="option-input">border.format: <input type="text" id="border.format" /></div>
+      <div class="option-input">border.color: <input type="text" id="border.color" /></div>
+      <div class="option-input">snapToGrid: <input type="checkbox" id="snapToGrid" /></div>
+      <div class="option-input">autoFill: <input type="text" id="autoFill" /></div>
+      <div class="option-input">showNumbering: <input type="checkbox" id="showNumbering" /></div>
+      <div class="option-input">squareColors: <input type="text" id="squareColors" /></div>
+      <div class="option-input" style="text-align: center"><button id="btnDraw">Go!</button></div>
     </div>
     <div id="main"></div>
     <script src="dragdrop.js" type="text/javascript"></script>
@@ -54,6 +70,7 @@
           squareColors: (document.getElementById("squareColors").value || dragdrop.defaults.squareColors.join(",")).split(",")
         };
         var main = document.getElementById("main");
+        main.style.display = "block";
         while(main.firstChild) {
           main.removeChild(main.firstChild);
         }
