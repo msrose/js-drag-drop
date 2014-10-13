@@ -139,7 +139,7 @@ window.dragdrop = (function() {
 
       if(this.showNumbering) {
         var divLabel = document.createElement("span");
-        divLabel.style.lineHeight = this.squareSize + "px";
+        divLabel.style.lineHeight = this.squareSize - this.border.size * 2 + "px";
         divLabel.innerText = i + 1;
         newSquare.appendChild(divLabel);
       }
